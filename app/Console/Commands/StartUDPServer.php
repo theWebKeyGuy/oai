@@ -46,7 +46,6 @@ class StartUDPServer extends Command
     /**
      * Execute the console command.
      *
-     * @param UDPServer $server
      * @return int
      */
     public function handle()
@@ -54,11 +53,9 @@ class StartUDPServer extends Command
         try {
 
             $this->server->start();
-            
             $this->info('Server Started!');
+            
             $this->GetMessages();
-
-            $this->server->end();
 
         } catch(Exception $e) {
             $this->error('Caught Exception: '.$e->getMessage());

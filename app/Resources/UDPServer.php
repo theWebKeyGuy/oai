@@ -19,6 +19,7 @@ class UDPServer
     {
         try {
             $this->CreateSocket();
+
             $this->BindSocket();
 
             return true;
@@ -101,10 +102,6 @@ class UDPServer
         if(empty($this->socket))
         {
             $this->CreateSocket();
-        }
-
-        if(empty($host)) {
-            $host = env('UDP_HOST', '127.0.0.1'); 
         }
 
         if(!socket_sendto($this->socket, $data, strlen($data), 0, $host, $port))

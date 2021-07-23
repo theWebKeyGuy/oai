@@ -71,23 +71,4 @@ class UDPServerController extends Controller
     {
         //
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy()
-    {
-        if(!$this->socket->end())
-        {
-            return response()->json([
-                'ended' => false
-            ], 400);
-        }
-
-        return response()->json([
-            'ended' => true
-        ]);
-    }
 }
