@@ -1,36 +1,25 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Resources;
 
-use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 use \Exception;
 
-class UDPServer extends Controller
+class UDPServer
 {
     private $socket;
 
-    public function __constructor() 
-    {
-        parent::__construct();
-    }
-
-        /** 
+    /** 
      * Starts our udp server and listens for messages.
      * @throws Exception
      * @return bool
      */
-    public function Start()
+    public function start() 
     {
         try {
             $this->CreateSocket();
-
             $this->BindSocket();
-
-            $this->GetMessages();
-
-            $this->CloseSocket();
 
             return true;
         } catch(Exception $e) {
@@ -41,11 +30,19 @@ class UDPServer extends Controller
     }
 
     /** 
+     *  Gets our socket so we can use it in our terminal.
+     */
+    public function GetSocket()
+    {
+        return $this->socket;
+    }
+
+    /** 
      * Creates our UDP Socket.
      * @throws Exception
      * @return bool
      */
-    protected function CreateSocket()
+    protected function CreateSocket() 
     {
         if(!($this->socket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP)))
         {
@@ -77,27 +74,10 @@ class UDPServer extends Controller
     }
 
     /** 
-     * Gets all of our messages for us and closes socket if it stops.
-     */
-    private function GetMessages()
-    {
-        while(true)
-        {   
-            //Receive some data
-            socket_recvfrom($this->socket, $message, 512, 0, $remote_ip, $remote_port);
-
-            if(!empty($message) && !empty($remote_ip) && !empty($remote_port))
-            {
-                Log::info($remote_ip.' : '.$remote_port.' -- '.$message);
-            }
-        }
-    }
-
-    /** 
      * Closes our socket server if needed.
      * @return bool
      */
-    protected function CloseSocket()
+    public function end()
     {
         if(!socket_close($this->socket)) {
             $errorcode = socket_last_error();
@@ -116,10 +96,11 @@ class UDPServer extends Controller
      * @throws Exception
      * @return bool
      */
-    protected function SendMessage($data, $host, $port)
+    public function SendMessage(string $data, string $host, string $port = '3074')
     {
-        if(empty($port)) {
-            $port = env('UDP_PORT', '3074');
+        if(empty($this->socket))
+        {
+            $this->CreateSocket();
         }
 
         if(empty($host)) {
@@ -132,5 +113,7 @@ class UDPServer extends Controller
             $errormsg  = socket_strerror($errorcode);
             throw new Exception('Can\'t Send Data to IP: '.$host.', Error Code ['.$errorcode.'] '.$errormsg);
         }
+
+        return true;
     }
 }

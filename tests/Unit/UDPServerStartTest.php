@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use App\Http\Resources\UDPServerTest AS UDPServer;
+use App\Resources\UDPServerTest AS UDPServer;
 
 class UDPServerStartTest extends TestCase
 {
@@ -11,7 +11,7 @@ class UDPServerStartTest extends TestCase
      * Checks to see if we are able to create a socket.
      * @return void
      */
-    public function test_create_upd_socket_server()
+    public function test_create_upd_socket()
     {
         $server = new UDPServer();
         $this->assertTrue($server->CreateSocket());

@@ -11,6 +11,8 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use App\Models\Messages;
+use App\Models\RecievedMessages;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -59,6 +61,16 @@ class User extends Authenticatable implements JWTSubject
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function sentMessages()
+    {
+        return $this->hasMany(Messages::class);
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(ReceievdMessages::class);
+    }
 
         /**
      * Get the identifier that will be stored in the subject claim of the JWT.

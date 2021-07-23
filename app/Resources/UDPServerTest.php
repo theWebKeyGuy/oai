@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Resources;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\UDPServer;
+use App\Resources\UDPServer;
 use Illuminate\Support\Facades\Log;
 use \Exception;
 
